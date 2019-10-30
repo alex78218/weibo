@@ -7,6 +7,14 @@ use Auth;
 
 class SessionsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('guest', [
+            'only' => ['create']
+        ]);
+    }
+
     public function create()
     {
         return view('sessions.create');
@@ -22,7 +30,9 @@ class SessionsController extends Controller
         if(Auth::attempt($credentials, $request->has('remember'))) {
             //数据库匹配正确
             session()->flash('success', '欢迎回来=.=');
-            return redirect()->route('users.show', [Auth::user()]);
+
+            // return redirect()->route('users.show', [Auth::user()]);
+            return redirect()->intended(route('users.show', [Auth::user()]));
         } else {
             //数据库匹配失败
             session()->flash('danger', '密码和邮箱不匹配');
@@ -34,7 +44,7 @@ class SessionsController extends Controller
     public function destroy()
     {
         Auth::logout();
-        session()->flash('success', '成功退出');
-        return redirect()->route('login');
+        session()->flash('success', '您已成功退出！');
+        return redirect('login');// 退出后重定向到login
     }
 }
