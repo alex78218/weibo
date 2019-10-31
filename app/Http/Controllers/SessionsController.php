@@ -38,7 +38,7 @@ class SessionsController extends Controller
             session()->flash('danger', '密码和邮箱不匹配');
             return redirect()->route('login')->withInput();
         }
-        return;
+
     }
 
     public function destroy()
