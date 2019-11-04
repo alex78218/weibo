@@ -28,11 +28,18 @@ class SessionsController extends Controller
        ]);
 
         if(Auth::attempt($credentials, $request->has('remember'))) {
-            //数据库匹配正确
-            session()->flash('success', '欢迎回来=.=');
+            if (Auth::user()->activiated){
+                //数据库匹配正确
+                session()->flash('success', '欢迎回来=.=');
+                // return redirect()->route('users.show', [Auth::user()]);
+                return redirect()->intended(route('users.show', [Auth::user()]));
+            }else {
+                Auth::logout();
+                session()->flash('warning', '你的账号未激活，请检查邮箱中的注册邮件进行激活。');
+                return redirect('/');
+            }
 
-            // return redirect()->route('users.show', [Auth::user()]);
-            return redirect()->intended(route('users.show', [Auth::user()]));
+
         } else {
             //数据库匹配失败
             session()->flash('danger', '密码和邮箱不匹配');
