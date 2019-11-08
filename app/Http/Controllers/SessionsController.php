@@ -28,7 +28,7 @@ class SessionsController extends Controller
        ]);
 
         if(Auth::attempt($credentials, $request->has('remember'))) {
-            if (Auth::user()->activiated){
+            if (Auth::user()->activated){
                 //数据库匹配正确
                 session()->flash('success', '欢迎回来=.=');
                 // return redirect()->route('users.show', [Auth::user()]);
